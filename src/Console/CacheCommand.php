@@ -28,7 +28,7 @@ final class CacheCommand extends Command
     {
         $manifest->write($factory->all());
 
-        $this->info('Blade icons manifest file generated successfully!');
+        $this->components->info('Blade icons cached successfully.');
 
         return 0;
     }

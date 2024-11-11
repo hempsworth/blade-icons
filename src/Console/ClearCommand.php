@@ -27,7 +27,7 @@ final class ClearCommand extends Command
     {
         $manifest->delete();
 
-        $this->info('Blade icons manifest file cleared!');
+        $this->components->info('Cached blade icons cleared successfully.');
 
         return 0;
     }

@@ -6,11 +6,12 @@ namespace Tests;
 
 class CachingTest extends TestCase
 {
+    
     /** @test */
     public function it_can_create_a_cache_file()
     {
         $this->artisan('icons:cache')
-            ->expectsOutput('Blade icons manifest file generated successfully!')
+            ->expectsOutput("\n   INFO  Blade icons cached successfully.  \n")
             ->assertExitCode(0);
     }
 
@@ -18,7 +19,7 @@ class CachingTest extends TestCase
     public function it_can_clear_the_cache()
     {
         $this->artisan('icons:clear')
-            ->expectsOutput('Blade icons manifest file cleared!')
+            ->expectsOutput("\n   INFO  Cached blade icons cleared successfully.  \n")
             ->assertExitCode(0);
     }
 }
