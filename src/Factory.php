@@ -15,29 +15,16 @@ use Illuminate\Support\Str;
 
 final class Factory
 {
-    private Filesystem $filesystem;
-
-    private IconsManifest $manifest;
-
-    private ?FilesystemFactory $disks;
-
-    private array $config;
-
     private array $sets = [];
 
     private array $cache = [];
 
     public function __construct(
-        Filesystem $filesystem,
-        IconsManifest $manifest,
-        ?FilesystemFactory $disks = null,
-        array $config = []
+        private Filesystem $filesystem,
+        private IconsManifest $manifest,
+        private ?FilesystemFactory $disks = null,
+        private array $config = []
     ) {
-        $this->filesystem = $filesystem;
-        $this->manifest = $manifest;
-        $this->disks = $disks;
-        $this->config = $config;
-
         $this->config['class'] = $config['class'] ?? '';
         $this->config['attributes'] = (array) ($config['attributes'] ?? []);
         $this->config['fallback'] = $config['fallback'] ?? '';
@@ -71,7 +58,7 @@ final class Factory
         $paths = (array) ($options['paths'] ?? $options['path'] ?? []);
 
         $options['paths'] = array_filter(array_map(
-            fn ($path) => $path !== '/' ? rtrim($path, '/') : $path,
+            fn (string|int $path): string => $path !== '/' ? rtrim((string) $path, '/') : $path,
             $paths,
         ));
 
@@ -118,7 +105,7 @@ final class Factory
     /**
      * @throws SvgNotFound
      */
-    public function svg(string $name, $class = '', array $attributes = []): Svg
+    public function svg(string $name, string|array $class = '', array $attributes = []): Svg
     {
         [$set, $name] = $this->splitSetAndName($name);
 
@@ -138,7 +125,7 @@ final class Factory
                         $this->contents($set, $name),
                         $this->formatAttributes($set, $class, $attributes),
                     );
-                } catch (SvgNotFound $exception) {
+                } catch (SvgNotFound) {
                     //
                 }
             }
@@ -168,7 +155,7 @@ final class Factory
                         $path,
                         $this->sets[$set]['disk'] ?? null,
                     );
-                } catch (FileNotFoundException $exception) {
+                } catch (FileNotFoundException) {
                     //
                 }
             }
@@ -190,7 +177,7 @@ final class Factory
 
     private function cleanSvgContents(string $contents): string
     {
-        return trim(preg_replace('/^(<\?xml.+?\?>)/', '', $contents));
+        return trim((string) preg_replace('/^(<\?xml.+?\?>)/', '', $contents));
     }
 
     private function splitSetAndName(string $name): array
@@ -209,11 +196,11 @@ final class Factory
         return collect($this->sets)->where('prefix', $prefix)->keys()->first();
     }
 
-    private function formatAttributes(string $set, $class = '', array $attributes = []): array
+    private function formatAttributes(string $set, string|array $class = '', array $attributes = []): array
     {
         if (is_string($class)) {
             if ($class = $this->buildClass($set, $class)) {
-                $attributes['class'] = $attributes['class'] ?? $class;
+                $attributes['class'] ??= $class;
             }
         } elseif (is_array($class)) {
             $attributes = $class;

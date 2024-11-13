@@ -62,20 +62,18 @@ final class BladeIconsServiceProvider extends ServiceProvider
             return $factory;
         });
 
-        $this->callAfterResolving(ViewFactory::class, function ($view, Application $app) {
+        $this->callAfterResolving(ViewFactory::class, function ($view, Application $app): void {
             $app->make(Factory::class)->registerComponents();
         });
     }
 
     private function registerManifest(): void
     {
-        $this->app->singleton(IconsManifest::class, function (Application $app) {
-            return new IconsManifest(
-                new Filesystem,
-                $this->manifestPath(),
-                $app->make(FilesystemFactory::class),
-            );
-        });
+        $this->app->singleton(IconsManifest::class, fn (Application $app) => new IconsManifest(
+            new Filesystem,
+            $this->manifestPath(),
+            $app->make(FilesystemFactory::class),
+        ));
     }
 
     private function manifestPath(): string

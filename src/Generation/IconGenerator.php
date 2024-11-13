@@ -12,14 +12,11 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final class IconGenerator
 {
-    private Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
-    private array $sets;
-
-    public function __construct(array $sets)
+    public function __construct(private readonly array $sets)
     {
         $this->filesystem = new Filesystem;
-        $this->sets = $sets;
     }
 
     public static function create(array $config): self

@@ -114,7 +114,7 @@ class IconGeneratorTest extends TestCase
                     string $tempFilepath,
                     array $iconSet,
                     SplFileInfo $file
-                ) use ($comment) {
+                ) use ($comment): void {
                     $fileContents = file_get_contents($tempFilepath);
                     file_put_contents($tempFilepath, $comment.$fileContents);
                 },

@@ -12,13 +12,10 @@ final class Svg implements Htmlable
 {
     use RendersAttributes;
 
-    private string $name;
-
     private string $contents;
 
-    public function __construct(string $name, string $contents, array $attributes = [])
+    public function __construct(private string $name, string $contents, array $attributes = [])
     {
-        $this->name = $name;
         $this->contents = $this->deferContent($contents, $attributes['defer'] ?? false);
 
         unset($attributes['defer']);
