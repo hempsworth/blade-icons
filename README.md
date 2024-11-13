@@ -134,8 +134,8 @@ We're not accepting requests to build new icon packages ourselves but you can [s
 
 ## Requirements
 
-- PHP 7.4 or higher
-- Laravel 8.0 or higher
+- PHP 8.1 or higher
+- Laravel 10.0 or higher
 
 ## Installation
 
